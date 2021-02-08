@@ -1,6 +1,7 @@
 package com.example.nearbyplace;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -83,20 +84,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    /**
+     * ------------------------ 1. Using Map Api
+     * -------------------------2. Fuse Location Provider
+     * -------------------------3. If we find just location then this  ----226 no.
+     */
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
+
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
@@ -163,7 +161,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
+    @SuppressLint("MissingPermission")
     private void getDeviceLocation() {
+
         mFusedLocationProviderClient.getLastLocation()
                 .addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
@@ -189,6 +189,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                         mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
                                     }
                                 };
+
                                 mFusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
 
                             }
@@ -198,4 +199,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     }
                 });
     }
+
+    /**
+     * ------------------------ 1. Using Place Api for finding where she is........!
+     */
 }
